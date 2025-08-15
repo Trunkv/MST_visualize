@@ -461,7 +461,7 @@ elif mode=="Compare":
         st.subheader("Eager Prim")
         draw_graph(G2, data["pos"], steps2[step_eager], "Eager")
         st.write("Heap:")
-        show_heap(steps1[step_eager][4])
+        show_heap(steps2[step_eager][4])
 
 # --- Large Graph Compare với lựa chọn Sparse / Dense ---
 elif mode == "Large Graph Compare":
