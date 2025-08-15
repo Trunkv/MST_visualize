@@ -385,6 +385,15 @@ def run_large_graph_animation(G, delay=0.05):
             draw_large_graph(G,pos,mst_edges=mst_edges_kruskal)
             time.sleep(delay)
 
+def show_heap_filtered(heap, in_tree):
+    seen = set()
+    filtered = []
+    for w, v in heap:
+        if v not in seen and v not in in_tree:
+            seen.add(v)
+            filtered.append((w, v))
+    for h in filtered:
+        st.write(h)
 # ---------------- STREAMLIT ----------------
 st.title("Prim's / Kruskal Visualization")
 
@@ -423,7 +432,7 @@ elif mode=="Eager Prim":
         st.session_state.step=len(steps)-1
     draw_graph(G,data["pos"],steps[st.session_state.step],"Eager")
     st.write("Heap:")
-    show_heap(steps[st.session_state.step][2])
+    show_heap_filtered(steps[st.session_state.step][2], steps[st.session_state.step][1])
 
 elif mode=="Kruskal":
     data = graph_options["Kruskal"]
