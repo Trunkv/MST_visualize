@@ -470,8 +470,8 @@ elif mode=="Compare":
         st.subheader("Eager Prim")
         draw_graph(G2, data["pos"], steps2[step_eager], "Eager")
         st.write("Heap:")
-        show_heap(steps2[step_eager][2])  # heap ở [2] cho Eager
-
+        # Eager: heap ở index 2, nhưng lọc cho gọn
+        show_heap_filtered(steps2[step_eager][2], steps2[step_eager][1])
 # --- Large Graph Compare với lựa chọn Sparse / Dense ---
 elif mode == "Large Graph Compare":
     import time
