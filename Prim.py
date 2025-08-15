@@ -40,16 +40,15 @@ graph_options = {
     },
     "Compare": {
         "edges": [
-            ("A","B",4), ("A","C",1), ("A","D",10),
-            ("B","C",2), ("B","E",6),
-            ("C","D",3), ("C","F",8),
-            ("D","F",2), ("E","F",5),
-            ("E","H",7), ("F","G",9),
-            ("G","H",11)
+            ("A", "B", 10), ("A", "C", 1), ("A", "D", 4),
+            ("B", "C", 3), ("B", "E", 0), ("C", "F", 8),
+            ("C", "D", 2), ("D", "F", 2), ("D", "G", 7),
+            ("E", "F", 1), ("E", "H", 8), ("F", "G", 6),
+            ("F", "H", 9), ("G", "H", 12)
         ],
         "pos": {
-            "A":(0,2),"B":(-1,1.5),"C":(1,1.5),"D":(2,2),
-            "E":(-1,0),"F":(1,0),"G":(2,0),"H":(0,-1)
+            "A": (0, 3), "B": (-1, 2), "C": (1, 2), "D": (2, 3),
+            "E": (-1, 1), "F": (1, 1), "G": (2, 1), "H": (0, 0)
         }
     }
 }
@@ -179,24 +178,31 @@ elif mode=="Eager Prim":
     show_heap(steps[st.session_state.step][2])
 
 else:  # Compare
-    data=graph_options["Compare"]
-    G1=nx.Graph()
+    data = graph_options["Compare"]
+    G1 = nx.Graph()
     G1.add_weighted_edges_from(data["edges"])
-    G2=nx.Graph()
+    G2 = nx.Graph()
     G2.add_weighted_edges_from(data["edges"])
-    steps1=lazy_prim_steps(G1,"A")
-    steps2=eager_prim_steps(G2,"A")
-    max_step=min(len(steps1),len(steps2))
-    if st.session_state.step>=max_step:
-        st.session_state.step=max_step-1
-    col1,col2=st.columns(2)
+
+    steps1 = lazy_prim_steps(G1,"A")
+    steps2 = eager_prim_steps(G2,"A")
+
+    # Chỉ giới hạn từng thuật toán riêng
+    step_lazy = st.session_state.step
+    step_eager = st.session_state.step
+    if step_lazy >= len(steps1):
+        step_lazy = len(steps1) - 1
+    if step_eager >= len(steps2):
+        step_eager = len(steps2) - 1
+
+    col1, col2 = st.columns(2)
     with col1:
         st.subheader("Lazy Prim")
-        draw_graph(G1,data["pos"],steps1[st.session_state.step],"Lazy")
+        draw_graph(G1, data["pos"], steps1[step_lazy], "Lazy")
         st.write("Heap:")
-        show_heap(steps1[st.session_state.step][4])
+        show_heap(steps1[step_lazy][4])
     with col2:
         st.subheader("Eager Prim")
-        draw_graph(G2,data["pos"],steps2[st.session_state.step],"Eager")
+        draw_graph(G2, data["pos"], steps2[step_eager], "Eager")
         st.write("Heap:")
-        show_heap(steps2[st.session_state.step][2])
+        show_heap(steps2[step_eager][2])
